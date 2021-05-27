@@ -1,4 +1,4 @@
-const _request = require('./RequestHandler/request')
+const _request = require('./request_handler/request')
 
 class API {
     constructor(){
