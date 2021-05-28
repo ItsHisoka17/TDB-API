@@ -56,6 +56,7 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium'}){
             let res = await this._request(path, {amount: options.amount, category: category, difficulty: options.difficulty}, err => {
                 if (err) reject(err)
             })
+            
             return resolve({
                 data: res.results
             })
