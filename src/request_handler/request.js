@@ -2,7 +2,7 @@ const fetch = require('node-superfetch');
 
 async function _request(path, query = {}){
     let baseURL = 'https://opentdb.com';
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         let regex = /^\/([A-Za-z]{3})\.([A-Za-z]{3})$/g;
         let urlMatch = regex.exec(path);
         if (!urlMatch) reject(new Error('Invalid Path'));
@@ -23,7 +23,7 @@ async function _request(path, query = {}){
         let response = await fetch.get(url);
 
         if (!response.ok || response.status !== 200) reject(new Error(`${response.statusText}`))
-        
+
         return resolve(response.body)
         }
     })
