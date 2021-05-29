@@ -31,19 +31,14 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium'}){
     let categories = {};
     let allCategories = data;
 
-    for (let i = allCategories.length - 14; i < allCategories.length; i++){
-        Object.defineProperty(categories, allCategories[i], {
-            value: i,
-            configurable: false
-        });
+    for (let i = 9; i < allCategories.length; i++){
+        categories[allCategories[i]] = i;
     }
     if (options.category && options.category.length > 0){
-        if (!categories[options.category]) throw new TypeError(`Invalid Category: Choose one of the following: ${Object.keys(categories)}`);
+        if (!categories[options.category]) throw new TypeError(`Invalid Category: Choose one of the following: ${Object.keys(categories).join(' | ')}`);
 
         return new Promise(async (resolve, reject) => {
-            let response = await this._request(path, options, async (err) => {
-                if (err) reject(err);
-            })
+            let response = await this._request(path, options)
             return resolve({
                 data: response.results
             })
@@ -53,10 +48,8 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium'}){
             let num = Math.floor(Math.random() * allCategories.length);
             let category = categories[Object.keys(categories)[num]];
             delete options.category;
-            let res = await this._request(path, {amount: options.amount, category: category, difficulty: options.difficulty}, err => {
-                if (err) reject(err)
-            })
-            
+            let res = await this._request(path, {amount: options.amount, category: category, difficulty: options.difficulty})
+
             return resolve({
                 data: res.results
             })
@@ -64,3 +57,5 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium'}){
         )}
     }
 }
+
+module.exports = API;

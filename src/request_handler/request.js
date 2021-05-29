@@ -1,6 +1,6 @@
 const fetch = require('node-superfetch');
 
-async function _request(path, query = {}, err){
+async function _request(path, query = {}){
     let baseURL = 'https://opentdb.com';
     return new Promise(async (resolve, reject) => {
         let regex = /^\/([A-Za-z]{3})\.([A-Za-z]{3})$/g
@@ -23,7 +23,6 @@ async function _request(path, query = {}, err){
         let response = await fetch.get(url);
 
         if (!response.ok || response.status !== 200) {
-            err(new Error(response.statusText))
             reject(new Error(response.statusText))
         }
 
