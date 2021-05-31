@@ -14,7 +14,7 @@
     "api",
     "trivia"
   ],
-  "author": "Hisoka, Skelly",
+  "author": "Hisoka",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ItsHisoka17/TDB-API/issues"
@@ -22,5 +22,17 @@
   "homepage": "https://github.com/ItsHisoka17/TDB-API#readme",
   "dependencies": {
     "node-superfetch": "^0.2.3"
-  }
+  },
+  "contributors": [
+    {
+      "email": "hashertechnical15@gmail.com",
+      "url": "https://github.com/ItsHisoka17",
+      "name": "ItsHisoka17#0017"
+    },
+    {
+      "email": "skellymclane@gmail.com"
+      "name": "skelly386#1410",
+      "url": "https:/github.com/SkellyM386"
+    }
+  ]
 }
