@@ -1,4 +1,3 @@
-
 const data = require('./data/categories.json');
 const fetch = require('node-superfetch');
 const _request = require('./request_handler/request');
@@ -10,7 +9,7 @@ const _request = require('./request_handler/request');
 const category_type = null;
 
 /**
- * @type {'Easy' | 'medium' | 'hard'}
+ * @type {'easy' | 'medium' | 'hard'}
  * @private
  */
 const difficulty_type = null;
@@ -20,6 +19,10 @@ class API {
         this._request = _request;
 
         this.session_tokens = [];
+        
+        this.categories = {};
+        
+        Object.assign(this.categories, data)
     }
     get baseURL(){
         return `https://opentdb.com`
@@ -44,15 +47,13 @@ class API {
      */
 async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', token: null }){
     let path = this.main_endpoint;
-    let categories = {};
-    let allCategories = data;
+    let categories = this.categories;
 
-    for (let i = 9; i < allCategories.length; i++){
-        categories[allCategories[i]] = i;
-    }
     if (options.category && options.category.length > 0){
         if (!categories[options.category]) throw new TypeError(`Invalid Category: Choose one of the following: ${Object.keys(categories).join(' | ')}`);
-
+        options.category = categories[options.category];
+        options.difficulty = options.difficulty.toLowerCase();
+        console.log(options.category)
         return new Promise(async (resolve, reject) => {
             let response = await this._request(path, options)
             return resolve({
@@ -61,14 +62,13 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', to
         })
     } else {
         return new Promise((async (resolve, reject) => {
-            let num = Math.floor(Math.random() * allCategories.length);
+            let num = Math.floor(Math.random() * Object.keys(categories).length);
             let category = categories[Object.keys(categories)[num]];
-            delete options.category;
-            const query = {amount: options.amount, category: category, difficulty: options.difficulty};
+            options.category = category;
             if(options.token){
               query['token'] = options.token;
             };
-            let res = await this._request(path, query)
+            let res = await this._request(path, options)
 
             return resolve({
                 data: res.results

@@ -17,8 +17,6 @@ async function _request(path, query = {}){
         } else {
             url = `${baseURL}${endpoint}?${queryString}`
         }
-
-        console.log(url)
         let response = await fetch.get(url);
 
         if (!response.ok || response.status !== 200) {
