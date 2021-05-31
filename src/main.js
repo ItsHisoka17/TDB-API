@@ -1,9 +1,25 @@
-const _request = require('./request_handler/request')
-const data = require('./data/categories.json')
+
+const data = require('./data/categories.json');
+const fetch = require('node-superfetch');
+const _request = require('./request_handler/request');
+
+/**
+ * @type {"General Knowledge" | "Books" | "Films" | "Music" | "Musical & Theatre" | "TV" | "Video Games" | "Board Games" | "Science & Nature" | "Computers" | "Mathematics" | "Mythology" | "Sports" | "Geography" | "History" | "Politics" | "Art" | "Celebrities" | "Animals" | "Vehicles" | "Comics" | "Gadgets" | "Anime & Manga" | "Cartoons & Animations"}
+ * @private
+ */
+const category_type = null;
+
+/**
+ * @type {'Easy' | 'medium' | 'hard'}
+ * @private
+ */
+const difficulty_type = null;
 
 class API {
     constructor(){
         this._request = _request;
+
+        this.session_tokens = [];
     }
     get baseURL(){
         return `https://opentdb.com`
@@ -15,8 +31,8 @@ class API {
         return `${this.baseURL}${this.main_endpoint}`
     }
     /**
-     * 
-     * @param {object} options
+     *
+     * @param {{ amount: number, category: category_type, difficulty: difficulty_type, token: null | string }} options
      * @example
      * const tdb_API = require('tdb-api');
      * const API = new tdb_API();
@@ -24,9 +40,9 @@ class API {
      * .then(res => {
      *      console.log(res)
      * })
-     * @returns {object} 
+     * @returns {object}
      */
-async getQuestions(options = {amount: 10, category: '', difficulty: 'medium'}){
+async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', token: null }){
     let path = this.main_endpoint;
     let categories = {};
     let allCategories = data;
@@ -48,14 +64,55 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium'}){
             let num = Math.floor(Math.random() * allCategories.length);
             let category = categories[Object.keys(categories)[num]];
             delete options.category;
-            let res = await this._request(path, {amount: options.amount, category: category, difficulty: options.difficulty})
+            const query = {amount: options.amount, category: category, difficulty: options.difficulty};
+            if(options.token){
+              query['token'] = options.token;
+            };
+            let res = await this._request(path, query)
 
             return resolve({
                 data: res.results
             })
         })
         )}
-    }
-}
+    };
 
+
+    /**
+     *
+     * @returns {Promise<string>}
+     */
+    async create_session_token(){
+      return await new Promise(async (resolve, reject) => {
+      const url = "https://opentdb.com/api_token.php?command=request";
+      const data = await fetch.get(url);
+      if(!data.ok){
+        reject('error getting session token');
+      };
+      const token = data.body.token;
+      this.session_tokens.push(token);
+      resolve(token);
+    });
+    };
+
+    /**
+     *
+     * @param {string} token
+     * @returns {Promise<string>}
+     */
+    async refresh_token(token){
+      return await new Promise(async (resolve, reject) => {
+        if(!this.session_tokens.includes(token)){
+          reject('token doesn\'t exist within this API handler')
+        } else {
+          const url = `https://opentdb.com/api_token.php?command=reset&token=${token}`;
+          const data = await fetch.get(url);
+          const new_token = data.body.token;
+          const index = this.session_tokens.indexOf(token);
+          this.session_tokens[index] = new_token;
+          resolve(new_token);
+        };
+      });
+    };
+};
 module.exports = API;
