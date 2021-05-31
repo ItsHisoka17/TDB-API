@@ -1,4 +1,5 @@
 const fetch = require('node-superfetch');
+const querystring = require('querystring');
 
 async function _request(path, query = {}){
     let baseURL = 'https://opentdb.com';
@@ -8,26 +9,22 @@ async function _request(path, query = {}){
         if (!urlMatch) reject(new Error('Invalid Path'));
 
         let endpoint = `/${urlMatch.slice(1).join('.')}`
-        let queryString = Object.keys(query).lenght>0?query:false;
+        let queryString = querystring.stringify(query)
         let url;
 
         if (!queryString){
             url = `${baseURL}${endpoint}`
         } else {
-            url = `${baseURL}${endpoint}?`
-
-        for (const [query, val] of Object.entries(queryString)){
-            url += `${query}=${val}&`
+            url = `${baseURL}${endpoint}?${queryString}`
         }
 
+        console.log(url)
         let response = await fetch.get(url);
 
         if (!response.ok || response.status !== 200) {
             reject(new Error(response.statusText))
         }
-
-        return resolve(response.body)
-        }
+        resolve(response.body)
     })
 }
 
