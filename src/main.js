@@ -117,4 +117,3 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', to
     };
 };
 module.exports = API;
-console.log(Object.keys(new API().categories).map((c) => `- ${c}`).join('\n\n'))
