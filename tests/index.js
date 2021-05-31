@@ -1,4 +1,4 @@
-const TDB_API = require('trivia-api');
+const TDB_API = require('tdb-api');
 
 const trivia = new TDB_API();
 
@@ -26,3 +26,4 @@ async function start(){
     })
 
 }
+start()

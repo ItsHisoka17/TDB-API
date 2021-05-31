@@ -1,6 +1,12 @@
 const fetch = require('node-superfetch');
 const querystring = require('querystring');
 
+/**
+ * 
+ * @param {string} path 
+ * @param {object} query
+ * @returns {Promise<object>}
+ */
 async function _request(path, query = {}){
     let baseURL = 'https://opentdb.com';
     return new Promise(async (resolve, reject) => {

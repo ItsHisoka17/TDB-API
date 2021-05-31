@@ -43,7 +43,7 @@ class API {
      * .then(res => {
      *      console.log(res)
      * })
-     * @returns {object}
+     * @returns Promise<{category: string, type: string, difficulty: string, question: string, correct_answer: string, incorrect_answers: Array<string>}>
      */
 async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', token: null }){
     let path = this.main_endpoint;
@@ -76,6 +76,7 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', to
         })
         )}
     };
+
 
 
     /**
@@ -116,3 +117,4 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', to
     };
 };
 module.exports = API;
+console.log(Object.keys(new API().categories).map((c) => `- ${c}`).join('\n\n'))

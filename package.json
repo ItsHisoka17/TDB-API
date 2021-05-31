@@ -1,6 +1,6 @@
 {
   "name": "tdb-api",
-  "version": "1.0.0",
+  "version": "1.5.2",
   "description": "A Wrapper for Trivia-Database API",
   "main": "src/main.js",
   "scripts": {
