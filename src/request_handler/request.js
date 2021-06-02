@@ -26,7 +26,7 @@ async function _request(path, query = {}){
         let response = await fetch.get(url);
 
         if (!response.ok || response.status !== 200) {
-            reject(new Error(response.statusText))
+            reject(new Error(response.statusText.length>0?response.statusText:'Unknown API Error'))
         }
         resolve(response.body)
     })

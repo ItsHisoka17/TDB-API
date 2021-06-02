@@ -65,9 +65,6 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', to
             let num = Math.floor(Math.random() * Object.keys(categories).length);
             let category = categories[Object.keys(categories)[num]];
             options.category = category;
-            if(options.token){
-              query['token'] = options.token;
-            };
             let res = await this._request(path, options)
 
             return resolve({
@@ -77,7 +74,12 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', to
         )}
     };
 
-
+    /**
+     * @return {Array<string>}
+     */
+    listCategories(){
+      return Object.keys(data).map((c) => `- ${c}`).join('\n\n')
+    }
 
     /**
      *
@@ -117,4 +119,3 @@ async getQuestions(options = {amount: 10, category: '', difficulty: 'medium', to
     };
 };
 module.exports = API;
-console.log(Object.keys(new API().categories).map((c) => `- ${c}`).join('\n\n'))

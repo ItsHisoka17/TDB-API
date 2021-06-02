@@ -97,4 +97,3 @@ start()
 ### Contact
 
 **[Discord](https://discord.gg/WhnmkwgtGb)** | **[Github](https://github.com/ItsHisoka17/TDB-API)**
-
